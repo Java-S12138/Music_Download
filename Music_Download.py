@@ -14,8 +14,7 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QObject, Signal, QUrl, QTimer
 from PySide2.QtMultimedia import QMediaContent, QMediaPlayer
-from PySide2.QtWidgets import QApplication, QTableWidgetItem, QAbstractItemView, QMessageBox, QListWidgetItem, QWidget
-
+from PySide2.QtWidgets import QApplication, QTableWidgetItem, QAbstractItemView, QMessageBox, QListWidgetItem
 
 class SignalStore(QObject):#进度条
     progress_update = Signal(int)
@@ -42,7 +41,7 @@ class Music_Dowload(QObject):
         so.progress_update.connect(self.setProgress)                    #进度条
         so.top_progress_update.connect(self.top_setProgress)            #进度条
         self.ongoing = False                                            #下载警告
-        self.ui = QUiLoader().load('dowload.ui')                        #关联ui界面文件
+        self.ui = QUiLoader().load(f'{os.getcwd()}/dowload.ui')                        #关联ui界面文件
         self.PLAY()
 
     def PLAY(self):
@@ -114,7 +113,7 @@ class Music_Dowload(QObject):
     def change_title(self):#更换上方图片
         title_image = ["title.png","title1.png","title2.png","title3.png","title4.png"]
         title = random.sample(title_image,1)
-        self.ui.label_5.setPixmap(QPixmap(f"./Image/{title[0]}"))
+        self.ui.label_5.setPixmap(QPixmap(f"{os.getcwd()}/Image/{title[0]}"))
     def home_download(self):#播放音乐下载
         os.makedirs("Music", exist_ok=True)
         url = self.date.music_url[0]
@@ -131,7 +130,7 @@ class Music_Dowload(QObject):
             temp = QListWidgetItem(list_info[0][i])
             self.date.music_id.append(list_info[1][i])
             self.date.music_name.append(list_info[0][i])
-            temp.setIcon(QIcon("./Image/song1.png"))
+            temp.setIcon(QIcon(f"{os.getcwd()}/Image/song1.png"))
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
 
@@ -232,7 +231,7 @@ class Music_Dowload(QObject):
             temp = QListWidgetItem(list_info[i][1] + "---" + list_info[i][2])
             self.date.music_id.append(list_info[i][0])
             self.date.music_name.append(list_info[i][1])
-            temp.setIcon(QIcon("./Image/song1.png"))
+            temp.setIcon(QIcon(f"{os.getcwd()}/Image/song1.png"))
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
     # 显示网易云搜索结果
@@ -251,7 +250,7 @@ class Music_Dowload(QObject):
             temp = QListWidgetItem(list_info[i][1]+"---"+list_info[i][2])
             self.date.music_id.append(list_info[i][0])
             self.date.music_name.append(list_info[i][1])
-            temp.setIcon(QIcon("./Image/song1.png"))
+            temp.setIcon(QIcon(f"{os.getcwd()}/Image/song1.png"))
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
         self.lock.release()
@@ -260,13 +259,13 @@ class Music_Dowload(QObject):
     #播放方式改变
     def change_modle(self):
         if self.ui.song_modle.toolTip() == "列表循环":
-            self.ui.song_modle.setIcon(QIcon("./Image/单曲循环.png"))
+            self.ui.song_modle.setIcon(QIcon(f"{os.getcwd()}/Image/单曲循环.png"))
             self.ui.song_modle.setToolTip("单曲循环")
         elif self.ui.song_modle.toolTip() == "单曲循环":
-            self.ui.song_modle.setIcon(QIcon("./Image/随机.png"))
+            self.ui.song_modle.setIcon(QIcon(f"{os.getcwd()}/Image/随机.png"))
             self.ui.song_modle.setToolTip("随机播放")
         elif self.ui.song_modle.toolTip() == "随机播放":
-            self.ui.song_modle.setIcon(QIcon("./Image/列表循环.png"))
+            self.ui.song_modle.setIcon(QIcon(f"{os.getcwd()}/Image/列表循环.png"))
             self.ui.song_modle.setToolTip("列表循环")
 
     # 播放和暂停
@@ -275,23 +274,23 @@ class Music_Dowload(QObject):
             if self.ui.home_music_name_label.text():
                 self.player.play()
                 self.ui.music_start_stop.setObjectName("stop")
-                self.ui.music_start_stop.setIcon(QIcon("./Image/停在-01.png"))
+                self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/停在-01.png"))
         elif self.ui.music_start_stop.objectName() == "stop":
             self.player.pause()
             self.ui.music_start_stop.setObjectName("start")
-            self.ui.music_start_stop.setIcon(QIcon("./Image/播放-01.png"))
+            self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/播放-01.png"))
 
     #音量图标显示
     def volume_adjust(self):
         self.player.setVolume(self.ui.volume_line.value())
         if self.ui.volume_line.value() == 0:
-            self.ui.volume.setPixmap(QPixmap("./Image/horn_0.png"))
+            self.ui.volume.setPixmap(QPixmap(f"{os.getcwd()}/Image/horn_0.png"))
         elif self.ui.volume_line.value() < 30:
-            self.ui.volume.setPixmap(QPixmap("./Image/horn_30.png"))
+            self.ui.volume.setPixmap(QPixmap(f"{os.getcwd()}/Image/horn_30.png"))
         elif self.ui.volume_line.value() < 80:
-            self.ui.volume.setPixmap(QPixmap("./Image/horn.png"))
+            self.ui.volume.setPixmap(QPixmap(f"{os.getcwd()}/Image/horn.png"))
         else:
-            self.ui.volume.setPixmap(QPixmap("./Image/horn_100.png"))
+            self.ui.volume.setPixmap(QPixmap(f"{os.getcwd()}/Image/horn_100.png"))
 
     # 调节播放进度
     def music_time_adjust(self):
@@ -396,13 +395,13 @@ class Music_Dowload(QObject):
         self.ui.time_line.setValue(0)
         self.ui.time_pre_2.setText("00:00")
         self.player.play()
-        self.ui.music_start_stop.setIcon(QIcon("./Image/停在-01.png"))
+        self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/停在-01.png"))
         self.ui.music_start_stop.setObjectName("stop")
 
     def player_stop_setting(self):#播放停止
         self.player.stop()
         self.ui.music_start_stop.setObjectName("start")
-        self.ui.music_start_stop.setIcon(QIcon("./Image/播放-01.png"))
+        self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/播放-01.png"))
         self.player_setting()
         self.copyright_flag = False
     def double_click_play(self):#首页音乐框 双击歌曲后播放
@@ -451,7 +450,7 @@ class Music_Dowload(QObject):
         self.ui.home_listWidget.clear()  # 列表清空
         for i in range(len(self.date.music_name)):  # 加入选中歌单中的歌曲名
             temp = QListWidgetItem(self.date.music_name[i])
-            temp.setIcon(QIcon("./Image/song1.png"))
+            temp.setIcon(QIcon(f"{os.getcwd()}/Image/song1.png"))
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
 
@@ -641,7 +640,7 @@ class Music_Dowload(QObject):
 
     def open_file(self):#打开文件夹
         try:
-            os.startfile('Music')
+            os.startfile(f'{os.getcwd()}/Music')
         except FileNotFoundError:
             self.ui.show_label.setText('你还没下载呢！')
 
@@ -937,7 +936,7 @@ class Music_Dowload(QObject):
                 for j in range(4):
                     sheet.write(i + 1, j, data[j])  # 数据
             os.makedirs("Excel", exist_ok=True)
-            book.save(f"Excel\{name}.xls")
+            book.save(f"{os.getcwd()}\Excel\\{name}.xls")
 
             self.ui.comment_show_label.setText("生成完毕！")
         except KeyError:
@@ -946,7 +945,7 @@ class Music_Dowload(QObject):
     def open_excel(self):#打开excel文件
         try:
             name = self.ui.comment_name_textEdit.toPlainText()
-            os.startfile(f'Excel\{name}.xls')
+            os.startfile(f'{os.getcwd()}\Excel\\{name}.xls')
         except FileNotFoundError:
             self.ui.comment_show_label.setText("没有找到Excel文件哦，请先生成吧！")
 
@@ -1184,7 +1183,7 @@ class Music_Dowload(QObject):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon('./Image/song.png'))
+    app.setWindowIcon(QIcon(f'{os.getcwd()}/Image/song.png'))
     music_dowload = Music_Dowload()
     music_dowload.ui.show()
     sys.exit(app.exec_())

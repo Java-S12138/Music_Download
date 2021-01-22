@@ -155,14 +155,15 @@ def askURL(url):
     # 通过歌单playlist_id获取歌单信息
 def playlist_info(playlist_id):
 
-    playlist_id = int(re.sub(r'\D', "",playlist_id))
-    html = askURL(f"http://api.no0a.cn/api/cloudmusic/playlist/{playlist_id}")
+    #playlist_id = int(re.sub(r'\D', "",playlist_id))
+    # html = askURL(f"http://api.no0a.cn/api/cloudmusic/playlist/{playlist_id}")
+    html = askURL(f"http://api.sunyj.xyz?site=netease&playlist={playlist_id}")
+    # print(html)
     song_name_l = []
     song_id_l = []
-    music_info = html['results']
-    for i in range(len(music_info)):
-        song_name_l.append(music_info[i]['name'])
-        song_id_l.append(music_info[i]['id'])
+    for i in html:
+        song_name_l.append(i['name'])
+        song_id_l.append(i['id'])
     return [song_name_l, song_id_l]
 
 
@@ -172,7 +173,11 @@ def song_url(song_id):
     urls = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
     return urls
 
+def test(id):
+    html = askURL(f"https://music.163.com/api/playlist/detail?id={id}")
+
+    info_dict = html['result']['tracks']
+    print(info_dict)
 
 if __name__ == '__main__':
-    print("Hello Music_Download")
-    print("BY:Java_S")
+    pass
