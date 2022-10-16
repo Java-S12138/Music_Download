@@ -29,7 +29,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Music_Download   BY:Java_S</string>
+   <string>Music_Download</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -880,7 +880,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -958,7 +958,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="song_modle">
+    <widget class="QPushButton" name="song_module">
      <property name="geometry">
       <rect>
        <x>437</x>
@@ -1571,7 +1571,7 @@ p, li { white-space: pre-wrap; }
     <zorder>home_download_Button</zorder>
     <zorder>open_Button_4</zorder>
     <zorder>home_music_name_label</zorder>
-    <zorder>song_modle</zorder>
+    <zorder>song_module</zorder>
     <zorder>home_comboBox</zorder>
     <zorder>home_Button_qq</zorder>
     <zorder>home_Button_ku</zorder>
@@ -1826,7 +1826,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2166,7 +2166,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2687,7 +2687,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -3367,7 +3367,8 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;-------------------------------------------&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;世界因代码而改变！&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'微软雅黑';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;BY：Java_S&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;BY：Java_S&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;Contributions: Bluemangoo&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QTextBrowser" name="textBrowser_2">
