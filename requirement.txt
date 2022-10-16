@@ -1,0 +1,4 @@
+xlwt
+cloudmusic
+PySide2
+pyquery

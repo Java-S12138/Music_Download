@@ -7,18 +7,21 @@ import re
 # 发送请求时的头文件
 heades = [
     {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0"},
-    {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"},
+    {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"},
     {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"},
-    {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36"}
+    {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36"}
 ]
 
-def music_download(song_url,name,sing_name=None):
-    response = requests.get(song_url, headers=heades[random.randint(0, len(heades)-1)])
+
+def music_download(song_url, name, sing_name=None):
+    response = requests.get(song_url, headers=heades[random.randint(0, len(heades) - 1)])
     if sing_name == None:
         with open("Music" + '/' + f"{name}.mp3", 'wb') as f:
             f.write(response.content)
     else:
-        with open("Music" + '/' + f"{name}-{sing_name}.mp3", 'wb') as f:
+        with open("Music" + '/' + f"{name} - {sing_name}.mp3", 'wb') as f:
             f.write(response.content)
 
 
@@ -55,7 +58,8 @@ def music_home_top(url):  # 网易云音乐排行榜首页显示
     info.append(idlist)
     return info
 
-def home_play_music(song_id,source):#腾讯酷狗音乐播放地址
+
+def home_play_music(song_id, source):  # 腾讯酷狗音乐播放地址
 
     url = "https://api.zhuolin.wang/api.php?callback=jQuery111305940605786929793_1588688866522&types=playlist&id=112504&_=1588688866523"
     data = {
@@ -76,7 +80,8 @@ def home_play_music(song_id,source):#腾讯酷狗音乐播放地址
         link = link.replace('\\', '')
     return link
 
-def home_show_music(type,name):#音乐首页显示
+
+def home_show_music(type, name):  # 音乐首页显示
     url = 'https://api.zhuolin.wang/api.php?callback=jQuery111303334237052043867_1589428664685&types=playlist&id=3778678&_=1589428664686'
     data = {
         'types': 'search',
@@ -93,7 +98,8 @@ def home_show_music(type,name):#音乐首页显示
     list_info = musicSpider(url, data, headers)
     return list_info
 
-def musicSpider(url, data, headers):#音乐爬取
+
+def musicSpider(url, data, headers):  # 音乐爬取
 
     rsp = requests.post(url, data=data, headers=headers)
     content = rsp.text
@@ -116,12 +122,11 @@ def musicSpider(url, data, headers):#音乐爬取
     return music_info_list
 
 
-
 # 获取首页,反回图片、名字、id号
 def wyy_first_page(type):
     # 先对首页进行简单处理
     url = f"https://music.163.com/discover/playlist/?cat={type}"
-    response = requests.get(url, headers=heades[random.randint(0, len(heades)-1)])
+    response = requests.get(url, headers=heades[random.randint(0, len(heades) - 1)])
     doc = pq(response.text)
     playlist = doc('li .u-cover.u-cover-1')  # 筛选出首页推荐的歌单
     playlist.find('.icon-play').remove()  # 移除多余的信息，便于后续提取信息
@@ -141,21 +146,23 @@ def wyy_first_page(type):
 
 
 def askURL(url):
-    haed = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"}
-    request = requests.get(url,headers=haed)
+    haed = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"}
+    request = requests.get(url, headers=haed)
 
     try:
         response = request.text
         html_dict = json.loads(response)
 
-    except :
+    except:
         pass
     return html_dict
 
     # 通过歌单playlist_id获取歌单信息
-def playlist_info(playlist_id):
 
-    #playlist_id = int(re.sub(r'\D', "",playlist_id))
+
+def playlist_info(playlist_id):
+    # playlist_id = int(re.sub(r'\D', "",playlist_id))
     # html = askURL(f"http://api.no0a.cn/api/cloudmusic/playlist/{playlist_id}")
     html = askURL(f"http://api.sunyj.xyz?site=netease&playlist={playlist_id}")
     # print(html)
@@ -173,11 +180,13 @@ def song_url(song_id):
     urls = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
     return urls
 
+
 def test(id):
     html = askURL(f"https://music.163.com/api/playlist/detail?id={id}")
 
     info_dict = html['result']['tracks']
     print(info_dict)
+
 
 if __name__ == '__main__':
     pass

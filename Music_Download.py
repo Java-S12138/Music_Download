@@ -16,10 +16,14 @@ from PySide2.QtCore import QObject, Signal, QUrl, QTimer
 from PySide2.QtMultimedia import QMediaContent, QMediaPlayer
 from PySide2.QtWidgets import QApplication, QTableWidgetItem, QAbstractItemView, QMessageBox, QListWidgetItem
 
-class SignalStore(QObject):#进度条
+
+class SignalStore(QObject):  # 进度条
     progress_update = Signal(int)
     top_progress_update = Signal(int)
+
+
 so = SignalStore()
+
 
 class Data_List:
     def __init__(self):
@@ -29,19 +33,20 @@ class Data_List:
 
         self.music_name = []  # 歌曲列表显示区域
         self.music_id = []  # 歌曲列表显示的ID
-        self.music_url = [] #音乐下载地址及信息
+        self.music_url = []  # 音乐下载地址及信息
 
         self.pre_music_index = 0  # 上一首歌的index
         self.music_pages = 0  # 歌单码数
         self.music_count = 0  # 歌单总页数
 
+
 class Music_Dowload(QObject):
     def __init__(self):
         super(Music_Dowload, self).__init__()
-        so.progress_update.connect(self.setProgress)                    #进度条
-        so.top_progress_update.connect(self.top_setProgress)            #进度条
-        self.ongoing = False                                            #下载警告
-        self.ui = QUiLoader().load(f'{os.getcwd()}/dowload.ui')                        #关联ui界面文件
+        so.progress_update.connect(self.setProgress)  # 进度条
+        so.top_progress_update.connect(self.top_setProgress)  # 进度条
+        self.ongoing = False  # 下载警告
+        self.ui = QUiLoader().load(f'{os.getcwd()}/dowload.ui')  # 关联ui界面文件
         self.PLAY()
 
     def PLAY(self):
@@ -110,19 +115,21 @@ class Music_Dowload(QObject):
             i.clicked.connect(self.home_title_playlist)  # 首页歌单和电台点击播放
         self.ui.music_next_2.clicked.connect(self.music_pages_next_thread)
         self.ui.music_pre_2.clicked.connect(self.music_pages_previous_thread)
-    def change_title(self):#更换上方图片
-        title_image = ["title.png","title1.png","title2.png","title3.png","title4.png"]
-        title = random.sample(title_image,1)
+
+    def change_title(self):  # 更换上方图片
+        title_image = ["title.png", "title1.png", "title2.png", "title3.png", "title4.png"]
+        title = random.sample(title_image, 1)
         self.ui.label_5.setPixmap(QPixmap(f"{os.getcwd()}/Image/{title[0]}"))
-    def home_download(self):#播放音乐下载
+
+    def home_download(self):  # 播放音乐下载
         os.makedirs("Music", exist_ok=True)
         url = self.date.music_url[0]
         music_name = self.date.music_url[1]
-        Music_Funciton.music_download(url,music_name)
+        Music_Funciton.music_download(url, music_name)
 
         self.ui.hmoe_show_label.setText('下载完成！')
 
-    def top_home_show(self,list_info):
+    def top_home_show(self, list_info):
         self.date.music_name.clear()
         self.date.music_id.clear()
         self.ui.home_listWidget.clear()
@@ -134,7 +141,7 @@ class Music_Dowload(QObject):
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
 
-    def home_top(self):#网易云排行榜
+    def home_top(self):  # 网易云排行榜
         text = self.ui.home_comboBox_2.currentText()
         self.ui.home_id_Edit.insertPlainText("netease")
         if text == "云音乐飙升榜":
@@ -213,7 +220,7 @@ class Music_Dowload(QObject):
             musi_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=3112516681")
 
     # 显示QQ音乐搜索结果
-    def search_show_qq(self,type):
+    def search_show_qq(self, type):
 
         self.ui.home_listWidget.clear()
         self.date.music_id.clear()
@@ -234,6 +241,7 @@ class Music_Dowload(QObject):
             temp.setIcon(QIcon(f"{os.getcwd()}/Image/song1.png"))
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
+
     # 显示网易云搜索结果
     def search_show_net(self):
         self.lock.acquire()
@@ -245,9 +253,9 @@ class Music_Dowload(QObject):
         self.ui.home_id_Edit.insertPlainText("netease")
         music_name = self.ui.home_input_Edit.text()
 
-        list_info = Music_Funciton.home_show_music("netease",music_name)
+        list_info = Music_Funciton.home_show_music("netease", music_name)
         for i in range(len(list_info)):
-            temp = QListWidgetItem(list_info[i][1]+"---"+list_info[i][2])
+            temp = QListWidgetItem(list_info[i][1] + "---" + list_info[i][2])
             self.date.music_id.append(list_info[i][0])
             self.date.music_name.append(list_info[i][1])
             temp.setIcon(QIcon(f"{os.getcwd()}/Image/song1.png"))
@@ -255,8 +263,7 @@ class Music_Dowload(QObject):
             self.ui.home_listWidget.addItem(temp)
         self.lock.release()
 
-
-    #播放方式改变
+    # 播放方式改变
     def change_modle(self):
         if self.ui.song_modle.toolTip() == "列表循环":
             self.ui.song_modle.setIcon(QIcon(f"{os.getcwd()}/Image/单曲循环.png"))
@@ -280,7 +287,7 @@ class Music_Dowload(QObject):
             self.ui.music_start_stop.setObjectName("start")
             self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/播放-01.png"))
 
-    #音量图标显示
+    # 音量图标显示
     def volume_adjust(self):
         self.player.setVolume(self.ui.volume_line.value())
         if self.ui.volume_line.value() == 0:
@@ -300,7 +307,7 @@ class Music_Dowload(QObject):
     def music_time_adjust_over(self):
         self.player.play()
 
-    #下载进程
+    # 下载进程
     def home_download_thread(self):
         dowload_music = threading.Thread(target=self.home_download)
         dowload_music.start()
@@ -368,7 +375,7 @@ class Music_Dowload(QObject):
                         break
         self.ui.home_listWidget.setCurrentRow(index)
 
-    def timeout_process(self):#时间线显示
+    def timeout_process(self):  # 时间线显示
         if self.ui.music_start_stop.objectName() == "stop":
             time_value = self.ui.time_line.value()
             self.ui.time_line.setValue(time_value + 1)
@@ -387,24 +394,25 @@ class Music_Dowload(QObject):
                     str(int(time_long / 1000) // 60).zfill(2) + ':' + str(int(time_long / 1000) % 60).zfill(2)
                 )
 
-    def music_double_click_thread(self):#首页音乐框 双击歌曲后播放 多线程运行
+    def music_double_click_thread(self):  # 首页音乐框 双击歌曲后播放 多线程运行
         double_click = threading.Thread(target=self.double_click_play)
         double_click.start()
 
-    def player_setting(self):#播放开始
+    def player_setting(self):  # 播放开始
         self.ui.time_line.setValue(0)
         self.ui.time_pre_2.setText("00:00")
         self.player.play()
         self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/停在-01.png"))
         self.ui.music_start_stop.setObjectName("stop")
 
-    def player_stop_setting(self):#播放停止
+    def player_stop_setting(self):  # 播放停止
         self.player.stop()
         self.ui.music_start_stop.setObjectName("start")
         self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/播放-01.png"))
         self.player_setting()
         self.copyright_flag = False
-    def double_click_play(self):#首页音乐框 双击歌曲后播放
+
+    def double_click_play(self):  # 首页音乐框 双击歌曲后播放
         self.ui.hmoe_show_label.setText('')
         index = self.ui.home_listWidget.currentRow()  # 获取双击的标签的索引值
         music_type = self.ui.home_id_Edit.toPlainText()
@@ -412,7 +420,7 @@ class Music_Dowload(QObject):
 
         if music_type == "tencent":
             music_id = self.date.music_id[index]
-            url = Music_Funciton.home_play_music(music_id,music_type)
+            url = Music_Funciton.home_play_music(music_id, music_type)
             self.player_stop_setting()  # 播放停止设置
             self.player.setMedia(QMediaContent(QUrl(url)))
             self.date.music_url.append(url)
@@ -441,8 +449,7 @@ class Music_Dowload(QObject):
             self.player_setting()  # 播放开始设置
             self.copyright_flag = False
 
-
-    def home_title_playlist(self):#显示歌单音乐
+    def home_title_playlist(self):  # 显示歌单音乐
         self.ui.home_id_Edit.clear()
         send = self.sender()
         id_str = send.objectName()
@@ -454,30 +461,31 @@ class Music_Dowload(QObject):
             temp.setToolTip("双击播放")
             self.ui.home_listWidget.addItem(temp)
 
-
-    def title_txt(self,title):#主页歌单标题字数限制
+    def title_txt(self, title):  # 主页歌单标题字数限制
         if len(title) > 18:
-            return title[:9] + '\n' + title[9:18]+"..."
+            return title[:9] + '\n' + title[9:18] + "..."
         elif len(title) > 9:
             return title[:9] + '\n' + title[9:]
         else:
             return title
 
-    def show_title_thread(self,type):#主页歌单标题button 多线程运行
-        first_page_display = threading.Thread(target=lambda:self.home_show_title(type))
+    def show_title_thread(self, type):  # 主页歌单标题button 多线程运行
+        first_page_display = threading.Thread(target=lambda: self.home_show_title(type))
         first_page_display.start()
 
     def music_pages_previous_thread(self):
         next = threading.Thread(target=self.music_pages_previous)
         next.start()
+
     def music_pages_next_thread(self):
         next = threading.Thread(target=self.music_pages_next)
         next.start()
+
     def home_palylist_thread(self):
         home_palylist_ing = threading.Thread(target=self.home_palylist)
         home_palylist_ing.start()
 
-    def home_palylist(self):#网易云排行榜
+    def home_palylist(self):  # 网易云排行榜
         text = self.ui.home_comboBox.currentText()
         if text == "华语":
             self.show_title_thread(text)
@@ -512,11 +520,11 @@ class Music_Dowload(QObject):
         elif text == "工作":
             self.show_title_thread(text)
 
-    def home_show_title(self,type):#主页歌单标题button
+    def home_show_title(self, type):  # 主页歌单标题button
 
         self.ui.home_listWidget.clear()
         self.date.img_url, self.date.bt_name, self.date.bt_id = Music_Funciton.wyy_first_page(type)
-        self.date.music_count = int(len(self.date.img_url)/8)
+        self.date.music_count = int(len(self.date.img_url) / 8)
         self.ui.hmoe_pages_label.setText(f'1/{str(self.date.music_count)}')
 
         for i in range(8):
@@ -526,23 +534,23 @@ class Music_Dowload(QObject):
             self.title_list[i].setText(self.title_txt(self.date.bt_name[i]))
             self.title_list[i].setObjectName(self.date.bt_id[i])
 
-    def music_pages_next(self):#歌单页面下一页
-        if self.date.music_pages+1 < self.date.music_count:
+    def music_pages_next(self):  # 歌单页面下一页
+        if self.date.music_pages + 1 < self.date.music_count:
             self.date.music_pages += 1
-            self.ui.hmoe_pages_label.setText(f'{str(self.date.music_pages+1)}/{str(self.date.music_count)}')
+            self.ui.hmoe_pages_label.setText(f'{str(self.date.music_pages + 1)}/{str(self.date.music_count)}')
             for i in range(8):
                 img = QPixmap()
-                img.loadFromData(requests.get(self.date.img_url[(8*self.date.music_pages)+i]).content)
+                img.loadFromData(requests.get(self.date.img_url[(8 * self.date.music_pages) + i]).content)
                 self.img_list[i].setPixmap(img)
-                self.title_list[i].setText(self.title_txt(self.date.bt_name[(8*self.date.music_pages)+i]))
-                self.title_list[i].setObjectName(self.date.bt_id[(8*self.date.music_pages)+i])
+                self.title_list[i].setText(self.title_txt(self.date.bt_name[(8 * self.date.music_pages) + i]))
+                self.title_list[i].setObjectName(self.date.bt_id[(8 * self.date.music_pages) + i])
         else:
             self.ui.hmoe_show_label.setText('最后一页啦!')
             time.sleep(1)
             self.ui.hmoe_show_label.setText('')
 
-    def music_pages_previous(self):#歌单页面上一页
-        if self.date.music_pages+1 == 1:
+    def music_pages_previous(self):  # 歌单页面上一页
+        if self.date.music_pages + 1 == 1:
             self.ui.hmoe_show_label.setText('已经是第一页!')
             time.sleep(1)
             self.ui.hmoe_show_label.setText('')
@@ -551,20 +559,20 @@ class Music_Dowload(QObject):
             self.date.music_pages -= 1
             for i in range(8):
                 img = QPixmap()
-                img.loadFromData(requests.get(self.date.img_url[(8 * self.date.music_pages)-i]).content)
+                img.loadFromData(requests.get(self.date.img_url[(8 * self.date.music_pages) - i]).content)
                 self.img_list[i].setPixmap(img)
-                self.title_list[i].setText(self.title_txt(self.date.bt_name[(8 * self.date.music_pages)-i]))
-                self.title_list[i].setObjectName(self.date.bt_id[(8 * self.date.music_pages)-i])
+                self.title_list[i].setText(self.title_txt(self.date.bt_name[(8 * self.date.music_pages) - i]))
+                self.title_list[i].setObjectName(self.date.bt_id[(8 * self.date.music_pages) - i])
 
-# ------------------------------ 歌单 ------------------------------
+    # ------------------------------ 歌单 ------------------------------
 
-    def setProgress(self, value):#歌单进度条
+    def setProgress(self, value):  # 歌单进度条
         self.ui.all_d_Bar.setValue(value)
 
-    def all_download(self,song_id,music,name):
+    def all_download(self, song_id, music, name):
         try:
             song_url = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
-            Music_Funciton.music_download(song_url,music,name)
+            Music_Funciton.music_download(song_url, music, name)
         except:
             pass
 
@@ -574,28 +582,30 @@ class Music_Dowload(QObject):
         id_num = self.ui.music_list_id_Edit.toPlainText()
         id_info = id_num.split()
         method = self.ui.music_list_tableWidget.rowCount()
-        self.ui.all_d_Bar.setRange(0,method)
+        self.ui.all_d_Bar.setRange(0, method)
 
         for i in range(method):
             music_n = self.ui.music_list_tableWidget.item(i, 0).text()
             music_s = self.ui.music_list_tableWidget.item(i, 1).text()
             music_name.append(music_n)
             music_singe.append(music_s)
+
         def dodownload():
             self.ongoing = True
             for i in range(method):
-                self.all_download(id_info[i],music_name[i],music_singe[i])
-                so.progress_update.emit(i+1)
+                self.all_download(id_info[i], music_name[i], music_singe[i])
+                so.progress_update.emit(i + 1)
             self.ongoing = False
+
         if self.ongoing:
             QMessageBox.warning(
                 self.ui,
                 '警告', '下载中，请等待完成')
             return
-        t = threading.Thread(target=dodownload,daemon=True)
+        t = threading.Thread(target=dodownload, daemon=True)
         t.start()
 
-    def music_list(self,type):#歌单
+    def music_list(self, type):  # 歌单
         self.ui.music_list_id_Edit.clear()
         method = self.ui.music_list_tableWidget.rowCount()
         for i in range(method):
@@ -617,18 +627,16 @@ class Music_Dowload(QObject):
             self.ui.music_list_tableWidget.setItem(i, 2, QTableWidgetItem(f"《{music_play_list[i].album}》"))
             self.ui.music_list_id_Edit.insertPlainText(f'{music_play_list[i].id}\n')
 
-
-    def music_list_downlodn(self):#歌单音乐下载
+    def music_list_downlodn(self):  # 歌单音乐下载
 
         id_num = self.ui.music_list_id_Edit.toPlainText()
         id_info = id_num.split()
 
         d_num = int(self.ui.music_list_lineEdit.text())
 
-        name = self.ui.music_list_tableWidget.item(d_num-1,0).text()
+        name = self.ui.music_list_tableWidget.item(d_num - 1, 0).text()
 
         song_id = id_info[d_num - 1]
-
 
         song_url = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
         Music_Funciton.music_download(song_url, name)
@@ -637,35 +645,36 @@ class Music_Dowload(QObject):
         time.sleep(1)
         self.ui.music_list_label.setText('')
 
-
-    def open_file(self):#打开文件夹
+    def open_file(self):  # 打开文件夹
         try:
             os.startfile(f'{os.getcwd()}/Music')
         except FileNotFoundError:
             self.ui.show_label.setText('你还没下载呢！')
 
-# ------------------------------ 歌单 ------------------------------
+    # ------------------------------ 歌单 ------------------------------
 
-# ------------------------------ 排行榜 ------------------------------
+    # ------------------------------ 排行榜 ------------------------------
 
-    def top_setProgress(self, value):#排行榜进度条
+    def top_setProgress(self, value):  # 排行榜进度条
         self.ui.top_d_Bar.setValue(value)
 
-    def all_top_download(self):#排行榜所有音乐下载
+    def all_top_download(self):  # 排行榜所有音乐下载
         music = self.ui.top_textEdit.toPlainText()
         music_info = music.split("\n")
         id_num = self.ui.top_id_Edit.toPlainText()
         id_info = id_num.split()
         music_info_remove = []
-        self.ui.top_d_Bar.setRange(0,len(id_info))
+        self.ui.top_d_Bar.setRange(0, len(id_info))
         for i in range(len(music_info)):
             music_info_remove.append(re.findall(r'《(.*)》', music_info[i]))
+
         def top_dodownload():
             self.ongoing = True
             for i in range(len(id_info)):
-                self.all_download(id_info[i], music_info_remove[i][0],name= "")
+                self.all_download(id_info[i], music_info_remove[i][0], name="")
                 so.top_progress_update.emit(i + 1)
             self.ongoing = False
+
         if self.ongoing:
             QMessageBox.warning(
                 self.ui,
@@ -674,7 +683,7 @@ class Music_Dowload(QObject):
         t = threading.Thread(target=top_dodownload, daemon=True)
         t.start()
 
-    def top(self):#网易云排行榜
+    def top(self):  # 网易云排行榜
         text = self.ui.comboBox.currentText()
         if text == "云音乐飙升榜":
             self.music_top("https://music.163.com/discover/toplist?id=19723756")
@@ -752,7 +761,7 @@ class Music_Dowload(QObject):
             self.music_top("https://music.163.com/discover/toplist?id=3112516681")
             self.ui.top_show_label.setText(f'《{text}》')
 
-    def music_top_dowload(self):#排行榜音乐下载
+    def music_top_dowload(self):  # 排行榜音乐下载
         try:
             num = int(self.ui.top_lineEdit.text())
 
@@ -767,13 +776,13 @@ class Music_Dowload(QObject):
             song_url = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
 
             os.makedirs("Music", exist_ok=True)
-            Music_Funciton.music_download(song_url,song_name)
+            Music_Funciton.music_download(song_url, song_name)
 
             self.ui.top_show_label.setText('下载完成！')
         except:
             self.ui.top_show_label.setText("你还没有输入序号哦！")
 
-    def music_top(self,url):#网易云音乐排行榜显示
+    def music_top(self, url):  # 网易云音乐排行榜显示
         self.ui.top_textEdit.clear()
         self.ui.top_id_Edit.clear()
 
@@ -803,16 +812,16 @@ class Music_Dowload(QObject):
             strlist = re.findall(r'">(.*?)</a>', str)
             idlist = re.findall(r'id=(\d+)', str)
             for i in range(len(strlist)):
-                self.ui.top_textEdit.insertPlainText(f"{i+1} 《{strlist[i]}》\n")
+                self.ui.top_textEdit.insertPlainText(f"{i + 1} 《{strlist[i]}》\n")
                 self.ui.top_id_Edit.insertPlainText(f"{idlist[i]}\n")
         except:
             self.ui.top_show_label.setText('提取文章出错！')
 
-# ------------------------------ 排行榜 ------------------------------
+    # ------------------------------ 排行榜 ------------------------------
 
-# ------------------------------ 歌词 ------------------------------
+    # ------------------------------ 歌词 ------------------------------
 
-    def lyrics_T(self):#歌词显示
+    def lyrics_T(self):  # 歌词显示
 
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
@@ -830,7 +839,7 @@ class Music_Dowload(QObject):
             song_id = id_info[d_num - 1]
 
             lrc_url = f'http://music.163.com/api/song/lyric?id={song_id}&lv=1&kv=1&tv=-1'
-            lyric = requests.get(lrc_url,headers = headers)
+            lyric = requests.get(lrc_url, headers=headers)
             json_obj = lyric.text  # 网页源码
             j = json.loads(json_obj)
             lrc = j['lrc']['lyric']
@@ -842,12 +851,11 @@ class Music_Dowload(QObject):
         else:
             self.ui.lyrics_show_label.setText("没有找到音乐信息,请先搜索吧！")
 
-    def lyrics(self):#歌词显示 时间版
+    def lyrics(self):  # 歌词显示 时间版
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
         }
         self.ui.lyrics_textEdit.clear()
-
 
         type_music = self.ui.type_Edit.toPlainText()
         if type_music == 'netease':
@@ -859,7 +867,7 @@ class Music_Dowload(QObject):
             song_id = id_info[d_num - 1]
 
             lrc_url = f'http://music.163.com/api/song/lyric?id={song_id}&lv=1&kv=1&tv=-1'
-            lyric = requests.get(lrc_url,headers = headers)
+            lyric = requests.get(lrc_url, headers=headers)
             json_obj = lyric.text  # 网页源码
             j = json.loads(json_obj)
             lrc = j['lrc']['lyric']
@@ -874,11 +882,11 @@ class Music_Dowload(QObject):
         else:
             self.ui.lyrics_show_label.setText("没有找到音乐信息,请先搜索吧！")
 
-# ------------------------------ 歌词 ------------------------------
+    # ------------------------------ 歌词 ------------------------------
 
-# ------------------------------ 评论 ------------------------------
+    # ------------------------------ 评论 ------------------------------
 
-    def in_excel(self):#把评论写入excel
+    def in_excel(self):  # 把评论写入excel
         headers = {
             'Host': 'music.163.com',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
@@ -904,7 +912,7 @@ class Music_Dowload(QObject):
             list_info_ct.append(info)
 
         try:
-            for page in range(0,1020,20):
+            for page in range(0, 1020, 20):
                 url = f'http://music.163.com/api/v1/resource/comments/R_SO_4_{id}?limit=20&offset=' + str(page)
                 response = requests.get(url=url, headers=headers)
                 # 将字符串转为json格式
@@ -928,7 +936,7 @@ class Music_Dowload(QObject):
                     list_info_ct.append(info)
             book = xlwt.Workbook(encoding='utf-8', style_compression=0)  # 创建workbook对象
             sheet = book.add_sheet("网易云评论", cell_overwrite_ok=True)  # 创建工作表
-            col = ("用户昵称","点赞数","发布时间","评论")
+            col = ("用户昵称", "点赞数", "发布时间", "评论")
             for i in range(4):
                 sheet.write(0, i, col[i])  # 列名
             for i in range(len(list_info_ct)):
@@ -942,22 +950,21 @@ class Music_Dowload(QObject):
         except KeyError:
             self.ui.comment_show_label.setText("没有找到音乐信息哦，请先搜索吧！")
 
-    def open_excel(self):#打开excel文件
+    def open_excel(self):  # 打开excel文件
         try:
             name = self.ui.comment_name_textEdit.toPlainText()
             os.startfile(f'{os.getcwd()}\Excel\\{name}.xls')
         except FileNotFoundError:
             self.ui.comment_show_label.setText("没有找到Excel文件哦，请先生成吧！")
 
-    def singer_show(self,name,id):#评论部分信息显示
+    def singer_show(self, name, id):  # 评论部分信息显示
         self.ui.comment_id_Edit.clear()
         self.ui.comment_name_textEdit.clear()
         self.ui.comment_show_label.setText(f'《{name}》')
         self.ui.comment_id_Edit.insertPlainText(f'{id}')
         self.ui.comment_name_textEdit.insertPlainText(f'{name}')
 
-
-    def look_comments(self):#查看网易云歌曲评论
+    def look_comments(self):  # 查看网易云歌曲评论
         self.ui.comment_textEdit.clear()
         self.ui.comment_id_Edit.clear()
         self.ui.comment_name_textEdit.clear()
@@ -972,12 +979,13 @@ class Music_Dowload(QObject):
 
             song_id = id_info[d_num - 1]
             self.output_comments(song_id)
-            self.singer_show(name,song_id)
+            self.singer_show(name, song_id)
         elif type_music == 'tencent' or type_music == 'kugou':
             self.ui.comment_show_label.setText("只支持网易云音乐哦！")
-        else :
+        else:
             self.ui.comment_show_label.setText("请先搜索音乐哦！")
-    def output_comments(self,id):#显示爬取的评论
+
+    def output_comments(self, id):  # 显示爬取的评论
 
         music = cloudmusic.getMusic(id)
 
@@ -990,11 +998,11 @@ class Music_Dowload(QObject):
             self.ui.comment_textEdit.insertPlainText(
                 f'评论:[ {com["content"].strip()} ]\n用户昵称:({com["nickName"]})\n点赞数:{com["likeCount"]}\n时间:{otherStyleTime}\n\n')
 
-
         try:
             for i in range(0, 400, 20):
-                self.ui.comment_textEdit.insertPlainText('---------------第 ' + str(i // 20 + 1) + ' 页---------------\n\n')
-                list_info = self.get_comments(i,id)
+                self.ui.comment_textEdit.insertPlainText(
+                    '---------------第 ' + str(i // 20 + 1) + ' 页---------------\n\n')
+                list_info = self.get_comments(i, id)
                 for j in range(20):
                     self.ui.comment_textEdit.insertPlainText(
                         f'评论:[ {list_info[j][1]} ]\n用户昵称:({list_info[j][0]})\n点赞数:{list_info[j][2]}\n时间:{list_info[j][3]}\n\n')
@@ -1039,9 +1047,9 @@ class Music_Dowload(QObject):
         else:
             self.ui.lyrics_show_label.setText("没有找到音乐信息,请先搜索吧！")
 
-# ------------------------------ 评论 ------------------------------
+    # ------------------------------ 评论 ------------------------------
 
-# ------------------------------音乐下载------------------------------
+    # ------------------------------音乐下载------------------------------
 
     def platform_netease(self):
         name = self.ui.input_Edit.text()
@@ -1064,16 +1072,13 @@ class Music_Dowload(QObject):
         else:
             self.show_music('kugou')
 
-
-    def show_music(self,source):#显示音乐
+    def show_music(self, source):  # 显示音乐
         self.ui.type_Edit.clear()
         self.ui.type_Edit.insertPlainText(source)
         self.ui.id_Edit.clear()
         self.ui.show_label.setText('搜索完成！')
 
-
         name = self.ui.input_Edit.text()
-
 
         url = 'https://api.zhuolin.wang/api.php?callback=jQuery111303334237052043867_1589428664685&types=playlist&id=3778678&_=1589428664686'
         data = {
@@ -1088,15 +1093,13 @@ class Music_Dowload(QObject):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
         }
 
-
         list_info = Music_Funciton.musicSpider(url, data, headers)
-
 
         method = self.ui.download_tableWidget.rowCount()
         for i in range(method):
             self.ui.download_tableWidget.removeRow(0)
 
-        for i in range(len(list_info) ):
+        for i in range(len(list_info)):
             self.ui.download_tableWidget.insertRow(0)
         for i in range(len(list_info)):
             self.ui.download_tableWidget.setItem(i, 0, QTableWidgetItem(f"{list_info[i][1]}"))
@@ -1104,8 +1107,7 @@ class Music_Dowload(QObject):
             self.ui.download_tableWidget.setItem(i, 2, QTableWidgetItem(f"《{list_info[i][3]}》"))
             self.ui.id_Edit.insertPlainText(f'{list_info[i][0]}\n')
 
-
-    def  download_type_thread(self):
+    def download_type_thread(self):
         download_type_ing = threading.Thread(target=self.download_type)
         download_type_ing.start()
 
@@ -1118,36 +1120,34 @@ class Music_Dowload(QObject):
         elif type_music == 'kugou':
             self.download_music('kugou')
 
-    def download_music_netease(self):#网易云音乐下载
-
+    def download_music_netease(self):  # 网易云音乐下载
 
         id_num = self.ui.id_Edit.toPlainText()
         id_info = id_num.split()
 
         d_num = int(self.ui.input_Edit_2.text())
 
-        name = self.ui.download_tableWidget.item(d_num-1,0).text()
-        sing_name = self.ui.download_tableWidget.item(d_num-1,1).text()
+        name = self.ui.download_tableWidget.item(d_num - 1, 0).text()
+        sing_name = self.ui.download_tableWidget.item(d_num - 1, 1).text()
 
         song_id = id_info[d_num - 1]
         song_url = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
 
-        os.makedirs("Music",exist_ok=True)
-        Music_Funciton.music_download(song_url,name,sing_name)
+        os.makedirs("Music", exist_ok=True)
+        Music_Funciton.music_download(song_url, name, sing_name)
 
         self.ui.show_label.setText('下载成功！')
         time.sleep(1)
         self.ui.show_label.setText('')
 
-
-    def download_music(self,source):#音乐下载
+    def download_music(self, source):  # 音乐下载
 
         id_num = self.ui.id_Edit.toPlainText()
         id_info = id_num.split()
 
         d_num = int(self.ui.input_Edit_2.text())
 
-        name = self.ui.download_tableWidget.item(d_num-1,0).text()
+        name = self.ui.download_tableWidget.item(d_num - 1, 0).text()
         sing_name = self.ui.download_tableWidget.item(d_num - 1, 1).text()
 
         song_id = id_info[d_num - 1]
@@ -1162,6 +1162,8 @@ class Music_Dowload(QObject):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
         }
 
+        link = ""
+
         try:
             rsp = requests.post(url, data=data, headers=headers)
             if source == 'tencent':
@@ -1173,7 +1175,6 @@ class Music_Dowload(QObject):
         except:
             self.ui.show_label.setText('音乐文件丢失！')
 
-
         try:
             os.makedirs("Music", exist_ok=True)
             Music_Funciton.music_download(link, name, sing_name)
@@ -1181,7 +1182,10 @@ class Music_Dowload(QObject):
         except Exception:
             self.ui.show_label.setText('这首难搞哦！')
 
+
 if __name__ == '__main__':
+    if not os.path.exists('Music'):
+        os.makedirs('Music')
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon(f'{os.getcwd()}/Image/song.png'))
     music_dowload = Music_Dowload()
