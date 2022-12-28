@@ -1,23 +1,68 @@
 import json
+import os
+
 import requests
 import random
-from pyquery import PyQuery as pq
+from pyquery import PyQuery
 import re
 
 # 发送请求时的头文件
-heades = [
+html_head = [
     {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0"},
     {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"},
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/79.0.3945.130 Safari/537.36"},
     {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"},
     {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36"}
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/76.0.3809.87 Safari/537.36"}
 ]
 
 
+def half2full(s):
+    ns = []
+    for c in s:
+        num = ord(c)
+        if num == 0x20:
+            num = 0x3000
+        elif 0x21 <= num <= 0x7e:
+            num += 0xfee0
+        ns.append(chr(num))
+    return ''.join(ns)
+
+
+def full2half(s):
+    ns = []
+    for c in s:
+        num = ord(c)
+        if num == 0x3000:
+            num = 0x20
+        elif 0x21 + 0xfee0 <= num <= 0x7e + 0xfee0:
+            num -= 0xfee0
+        ns += chr(num)
+    ns = ''.join(ns)
+    return ns
+
+
+def make_valid_name(name):
+    bad_chars = r'/\:*?"<>|'
+    nl = list(name)
+    for i, c in enumerate(nl):
+        if c in bad_chars:
+            nl[i] = half2full(c)
+    name = ''.join(nl)
+    return name
+
+
 def music_download(song_url, name, sing_name=None):
-    response = requests.get(song_url, headers=heades[random.randint(0, len(heades) - 1)])
-    if sing_name == None:
+    response = requests.get(song_url, headers=html_head[random.randint(0, len(html_head) - 1)])
+
+    os.makedirs('Music', exist_ok=True)
+    name = make_valid_name(name)
+    if sing_name is not None:
+        sing_name = make_valid_name(sing_name)
+
+    if sing_name is None:
         with open("Music" + '/' + f"{name}.mp3", 'wb') as f:
             f.write(response.content)
     else:
@@ -28,6 +73,7 @@ def music_download(song_url, name, sing_name=None):
 def music_home_top(url):  # 网易云音乐排行榜首页显示
 
     try:
+        # noinspection SpellCheckingInspection
         headers = {
             'authority': 'music.163.com',
             'upgrade-insecure-requests': '1',
@@ -44,19 +90,14 @@ def music_home_top(url):  # 网易云音乐排行榜首页显示
         res = requests.get(url, headers=headers)
         res.encoding = res.apparent_encoding
         res.raise_for_status()
+        string = re.findall(r'<Ul Class="F-Hide">(.*?)</Ul>', res.text, re.I)[0]
+        str_list = re.findall(r'">(.*?)</a>', string)
+        id_list = re.findall(r'id=(\d+)', string)
+
+        info = [str_list, id_list]
+        return info
     except:
-        pass
-
-    text = res.text
-    all = re.findall(r'<Ul Class="F-Hide">(.*?)</Ul>', text, re.I)
-    str = all[0]
-    strlist = re.findall(r'">(.*?)</a>', str)
-    idlist = re.findall(r'id=(\d+)', str)
-
-    info = []
-    info.append(strlist)
-    info.append(idlist)
-    return info
+        return None
 
 
 def home_play_music(song_id, source):  # 腾讯酷狗音乐播放地址
@@ -71,6 +112,7 @@ def home_play_music(song_id, source):  # 腾讯酷狗音乐播放地址
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
     }
 
+    link = ""
     rsp = requests.post(url, data=data, headers=headers)
     if source == 'tencent':
         link = rsp.text[rsp.text.index('http'):rsp.text.index('",')]
@@ -81,12 +123,12 @@ def home_play_music(song_id, source):  # 腾讯酷狗音乐播放地址
     return link
 
 
-def home_show_music(type, name):  # 音乐首页显示
+def home_show_music(source, name):  # 音乐首页显示
     url = 'https://api.zhuolin.wang/api.php?callback=jQuery111303334237052043867_1589428664685&types=playlist&id=3778678&_=1589428664686'
     data = {
         'types': 'search',
         'count': '20',
-        'source': type,
+        'source': source,
         'pages': '1',
         'name': name
     }
@@ -95,11 +137,11 @@ def home_show_music(type, name):  # 音乐首页显示
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
     }
 
-    list_info = musicSpider(url, data, headers)
+    list_info = music_spider(url, data, headers)
     return list_info
 
 
-def musicSpider(url, data, headers):  # 音乐爬取
+def music_spider(url, data, headers):  # 音乐爬取
 
     rsp = requests.post(url, data=data, headers=headers)
     content = rsp.text
@@ -109,25 +151,17 @@ def musicSpider(url, data, headers):  # 音乐爬取
 
     music_info_list = []
     for i in info_list:
-        id = i.get('id')
-        name = i.get('name')
-        artist = i.get('artist')
-        album = i.get('album')
-        info_info = []
-        info_info.append(id)
-        info_info.append(name.replace(' ', ''))
-        info_info.append(artist[0])
-        info_info.append(album.replace(' ', ''))
+        info_info = [i.get('id'), i.get('name').replace(' ', ''), i.get('artist')[0], i.get('album').replace(' ', '')]
         music_info_list.append(info_info)
     return music_info_list
 
 
 # 获取首页,反回图片、名字、id号
-def wyy_first_page(type):
+def wyy_first_page(song_list):
     # 先对首页进行简单处理
-    url = f"https://music.163.com/discover/playlist/?cat={type}"
-    response = requests.get(url, headers=heades[random.randint(0, len(heades) - 1)])
-    doc = pq(response.text)
+    url = f"https://music.163.com/discover/playlist/?cat={song_list}"
+    response = requests.get(url, headers=html_head[random.randint(0, len(html_head) - 1)])
+    doc = PyQuery(response.text)
     playlist = doc('li .u-cover.u-cover-1')  # 筛选出首页推荐的歌单
     playlist.find('.icon-play').remove()  # 移除多余的信息，便于后续提取信息
     playlist.find('div:contains(getPlayCount)').siblings().remove()
@@ -145,18 +179,17 @@ def wyy_first_page(type):
     return [img_url_l, name_list_l, id_list_l]
 
 
-def askURL(url):
-    haed = {
+def ask_url(url):
+    head = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"}
-    request = requests.get(url, headers=haed)
+    request = requests.get(url, headers=head)
 
     try:
         response = request.text
         html_dict = json.loads(response)
-
+        return html_dict
     except:
-        pass
-    return html_dict
+        return {}
 
     # 通过歌单playlist_id获取歌单信息
 
@@ -164,7 +197,7 @@ def askURL(url):
 def playlist_info(playlist_id):
     # playlist_id = int(re.sub(r'\D', "",playlist_id))
     # html = askURL(f"http://api.no0a.cn/api/cloudmusic/playlist/{playlist_id}")
-    html = askURL(f"http://api.sunyj.xyz?site=netease&playlist={playlist_id}")
+    html = ask_url(f"https://api.sunyj.xyz?site=netease&playlist={playlist_id}")
     # print(html)
     song_name_l = []
     song_id_l = []
@@ -175,17 +208,10 @@ def playlist_info(playlist_id):
 
 
 # 通过指定的歌曲song_id获取歌曲的音频二进制文件
-def song_url(song_id):
+def get_song_url(song_id):
     # 通过urls获取歌曲下载链接
-    urls = f"http://music.163.com/song/media/outer/url?id={song_id}.mp3"
+    urls = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
     return urls
-
-
-def test(id):
-    html = askURL(f"https://music.163.com/api/playlist/detail?id={id}")
-
-    info_dict = html['result']['tracks']
-    print(info_dict)
 
 
 if __name__ == '__main__':

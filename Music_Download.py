@@ -9,7 +9,7 @@ import requests
 import datetime
 import threading
 import cloudmusic
-import Music_Funciton
+import Music_Function
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QObject, Signal, QUrl, QTimer, QByteArray
@@ -49,7 +49,7 @@ class DataList:
 def all_download(song_id, music, name):
     try:
         song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
-        Music_Funciton.music_download(song_url, music, name)
+        Music_Function.music_download(song_url, music, name)
     except:
         pass
 
@@ -151,7 +151,7 @@ class MusicDownload(QObject):
         os.makedirs("Music", exist_ok=True)
         url = self.date.music_url[0]
         music_name = self.date.music_url[1]
-        Music_Funciton.music_download(url, music_name)
+        Music_Function.music_download(url, music_name)
 
         self.ui.hmoe_show_label.setText('下载完成！')
 
@@ -170,57 +170,57 @@ class MusicDownload(QObject):
     def home_top(self):  # 网易云排行榜
         text = self.ui.home_comboBox_2.currentText()
         self.ui.home_id_Edit.insertPlainText("netease")
-        music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=19723756")
+        music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=19723756")
         if text == "云音乐飙升榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=19723756")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=19723756")
         elif text == "云音乐新歌榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=3779629")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=3779629")
         elif text == "网易原创歌曲榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=2884035")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=2884035")
         elif text == "云音乐热歌榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=3778678")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=3778678")
         elif text == "云音乐说唱榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=991319590")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=991319590")
         elif text == "云音乐古典音乐榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=71384707")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=71384707")
         elif text == "云音乐电音榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=1978921795")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=1978921795")
         elif text == "抖音排行榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=2250011882")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=2250011882")
         elif text == "新声榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=2617766278")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=2617766278")
         elif text == "云音乐ACG音乐榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=71385702")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=71385702")
         elif text == "云音乐韩语榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=745956260")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=745956260")
         elif text == "云音乐国电榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=10520166")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=10520166")
         elif text == "英国Q杂志中文版周榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=2023401535")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=2023401535")
         elif text == "电竞音乐榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=2006508653")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=2006508653")
         elif text == "UK排行榜周榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=180106")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=180106")
         elif text == "美国Billboard周榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=60198")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=60198")
         elif text == "Beatport全球电子舞曲榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=3812895")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=3812895")
         elif text == "KTV唛榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=21845217")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=21845217")
         elif text == "iTunes榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=11641012")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=11641012")
         elif text == "日本Oricon周榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=60131")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=60131")
         elif text == "Hit FM Top榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=120001")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=120001")
         elif text == "台湾Hito排行榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=112463")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=112463")
         elif text == "云音乐欧美热歌榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=2809513713")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=2809513713")
         elif text == "法国 NRJ Vos Hits 周榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=27135204")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=27135204")
         elif text == "中国新乡村音乐排行榜":
-            music_info = Music_Funciton.music_home_top("https://music.163.com/discover/toplist?id=3112516681")
+            music_info = Music_Function.music_home_top("https://music.163.com/discover/toplist?id=3112516681")
         self.top_home_show(music_info)
 
     # 显示QQ音乐搜索结果
@@ -232,13 +232,13 @@ class MusicDownload(QObject):
         self.ui.home_id_Edit.clear()
         music_name = self.ui.home_input_Edit.text()
         self.ui.home_id_Edit.insertPlainText("tencent")
-        list_info = Music_Funciton.home_show_music(type_in_method, music_name)
+        list_info = Music_Function.home_show_music(type_in_method, music_name)
         # if type_in_method == "tencent":
         #     self.ui.home_id_Edit.insertPlainText("tencent")
-        #     list_info = Music_Funciton.home_show_music(type_in_method, music_name)
+        #     list_info = Music_Function.home_show_music(type_in_method, music_name)
         if type_in_method == "kugou":
             self.ui.home_id_Edit.insertPlainText("kugou")
-            list_info = Music_Funciton.home_show_music(type_in_method, music_name)
+            list_info = Music_Function.home_show_music(type_in_method, music_name)
 
         for i in range(len(list_info)):
             temp = QListWidgetItem(list_info[i][1] + "---" + list_info[i][2])
@@ -259,7 +259,7 @@ class MusicDownload(QObject):
         self.ui.home_id_Edit.insertPlainText("netease")
         music_name = self.ui.home_input_Edit.text()
 
-        list_info = Music_Funciton.home_show_music("netease", music_name)
+        list_info = Music_Function.home_show_music("netease", music_name)
         for i in range(len(list_info)):
             temp = QListWidgetItem(list_info[i][1] + "---" + list_info[i][2])
             self.date.music_id.append(list_info[i][0])
@@ -272,13 +272,13 @@ class MusicDownload(QObject):
     # 播放方式改变
     def change_module(self):
         if self.ui.song_module.toolTip() == "列表循环":
-            self.ui.song_module.setIcon(QIcon(f"{os.getcwd()}/Image/单曲循环.png"))
+            self.ui.song_module.setIcon(QIcon(f"{os.getcwd()}/Image/single-loop.png"))
             self.ui.song_module.setToolTip("单曲循环")
         elif self.ui.song_module.toolTip() == "单曲循环":
-            self.ui.song_module.setIcon(QIcon(f"{os.getcwd()}/Image/随机.png"))
+            self.ui.song_module.setIcon(QIcon(f"{os.getcwd()}/Image/shuffle-playback.png"))
             self.ui.song_module.setToolTip("随机播放")
         elif self.ui.song_module.toolTip() == "随机播放":
-            self.ui.song_module.setIcon(QIcon(f"{os.getcwd()}/Image/列表循环.png"))
+            self.ui.song_module.setIcon(QIcon(f"{os.getcwd()}/Image/list-loop.png"))
             self.ui.song_module.setToolTip("列表循环")
 
     # 播放和暂停
@@ -287,11 +287,11 @@ class MusicDownload(QObject):
             if self.ui.home_music_name_label.text():
                 self.player.play()
                 self.ui.music_start_stop.setObjectName("stop")
-                self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/停在-01.png"))
+                self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/pause-song.png"))
         elif self.ui.music_start_stop.objectName() == "stop":
             self.player.pause()
             self.ui.music_start_stop.setObjectName("start")
-            self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/播放-01.png"))
+            self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/play-song.png"))
 
     # 音量图标显示
     def volume_adjust(self):
@@ -315,8 +315,8 @@ class MusicDownload(QObject):
 
     # 下载进程
     def home_download_thread(self):
-        dowload_music = threading.Thread(target=self.home_download)
-        dowload_music.start()
+        download_music = threading.Thread(target=self.home_download)
+        download_music.start()
 
     # 下一首线程
     def next_music_thread(self):
@@ -408,13 +408,13 @@ class MusicDownload(QObject):
         self.ui.time_line.setValue(0)
         self.ui.time_pre_2.setText("00:00")
         self.player.play()
-        self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/停在-01.png"))
+        self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/pause-song.png"))
         self.ui.music_start_stop.setObjectName("stop")
 
     def player_stop_setting(self):  # 播放停止
         self.player.stop()
         self.ui.music_start_stop.setObjectName("start")
-        self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/播放-01.png"))
+        self.ui.music_start_stop.setIcon(QIcon(f"{os.getcwd()}/Image/play-song.png"))
         self.player_setting()
         self.copyright_flag = False
 
@@ -426,7 +426,7 @@ class MusicDownload(QObject):
 
         if music_type == "tencent":
             music_id = self.date.music_id[index]
-            url = Music_Funciton.home_play_music(music_id, music_type)
+            url = Music_Function.home_play_music(music_id, music_type)
             self.player_stop_setting()  # 播放停止设置
             self.player.setMedia(QMediaContent(QUrl(url)))
             self.date.music_url.append(url)
@@ -436,7 +436,7 @@ class MusicDownload(QObject):
             self.copyright_flag = False
         elif music_type == "kugou":
             music_id = self.date.music_id[index]
-            url = Music_Funciton.home_play_music(music_id, music_type)
+            url = Music_Function.home_play_music(music_id, music_type)
             self.player_stop_setting()  # 播放停止设置
             self.player.setMedia(QMediaContent(QUrl(url)))
             self.date.music_url.append(url)
@@ -446,7 +446,7 @@ class MusicDownload(QObject):
             self.copyright_flag = False
         else:
             music_id = self.date.music_id[index]
-            url = Music_Funciton.song_url(music_id)
+            url = Music_Function.get_song_url(music_id)
             self.player_stop_setting()  # 播放停止设置
             self.player.setMedia(QMediaContent(QUrl(url)))
             self.date.music_url.append(url)
@@ -459,7 +459,7 @@ class MusicDownload(QObject):
         self.ui.home_id_Edit.clear()
         send = self.sender()
         id_str = send.objectName()
-        self.date.music_name, self.date.music_id = Music_Funciton.playlist_info(id_str.split('=')[1])
+        self.date.music_name, self.date.music_id = Music_Function.playlist_info(id_str.split('=')[1])
         self.ui.home_listWidget.clear()  # 列表清空
         for i in range(len(self.date.music_name)):  # 加入选中歌单中的歌曲名
             temp = QListWidgetItem(self.date.music_name[i])
@@ -521,7 +521,7 @@ class MusicDownload(QObject):
     def home_show_title(self, type_in_method):  # 主页歌单标题button
 
         self.ui.home_listWidget.clear()
-        self.date.img_url, self.date.bt_name, self.date.bt_id = Music_Funciton.wyy_first_page(type_in_method)
+        self.date.img_url, self.date.bt_name, self.date.bt_id = Music_Function.wyy_first_page(type_in_method)
         self.date.music_count = int(len(self.date.img_url) / 8)
         self.ui.hmoe_pages_label.setText(f'1/{str(self.date.music_count)}')
 
@@ -583,9 +583,9 @@ class MusicDownload(QObject):
 
         def do_download():
             self.ongoing = True
-            for i in range(method):
-                all_download(id_info[i], music_name[i], music_singe[i])
-                so.progress_update.emit(i + 1)
+            for var1 in range(method):
+                all_download(id_info[var1], music_name[var1], music_singe[var1])
+                so.progress_update.emit(var1 + 1)
             self.ongoing = False
 
         if self.ongoing:
@@ -630,7 +630,7 @@ class MusicDownload(QObject):
         song_id = id_info[d_num - 1]
 
         song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
-        Music_Funciton.music_download(song_url, name)
+        Music_Function.music_download(song_url, name)
 
         self.ui.music_list_label.setText('下载成功！')
         time.sleep(1)
@@ -659,11 +659,11 @@ class MusicDownload(QObject):
         for i in range(len(music_info)):
             music_info_remove.append(re.findall(r'《(.*)》', music_info[i]))
 
-        def top_dodownload():
+        def top_do_download():
             self.ongoing = True
-            for i in range(len(id_info)):
-                all_download(id_info[i], music_info_remove[i][0], name="")
-                so.top_progress_update.emit(i + 1)
+            for var1 in range(len(id_info)):
+                all_download(id_info[var1], music_info_remove[var1][0], name="")
+                so.top_progress_update.emit(var1 + 1)
             self.ongoing = False
 
         if self.ongoing:
@@ -671,7 +671,7 @@ class MusicDownload(QObject):
                 self.ui,
                 '警告', '下载中，请等待完成')
             return
-        t = threading.Thread(target=top_dodownload, daemon=True)
+        t = threading.Thread(target=top_do_download, daemon=True)
         t.start()
 
     def top(self):  # 网易云排行榜
@@ -767,7 +767,7 @@ class MusicDownload(QObject):
             song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
 
             os.makedirs("Music", exist_ok=True)
-            Music_Funciton.music_download(song_url, song_name)
+            Music_Function.music_download(song_url, song_name)
 
             self.ui.top_show_label.setText('下载完成！')
         except:
@@ -778,6 +778,7 @@ class MusicDownload(QObject):
         self.ui.top_id_Edit.clear()
 
         try:
+            # noinspection SpellCheckingInspection
             headers = {
                 'authority': 'music.163.com',
                 'upgrade-insecure-requests': '1',
@@ -901,7 +902,8 @@ class MusicDownload(QObject):
 
         try:
             for page in range(0, 1020, 20):
-                url = f'https://music.163.com/api/v1/resource/comments/R_SO_4_{id_in_method}?limit=20&offset=' + str(page)
+                url = f'https://music.163.com/api/v1/resource/comments/R_SO_4_{id_in_method}?limit=20&offset=' + str(
+                    page)
                 response = requests.get(url=url, headers=headers)
                 # 将字符串转为json格式
                 result = json.loads(response.text)
@@ -1081,7 +1083,7 @@ class MusicDownload(QObject):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
         }
 
-        list_info = Music_Funciton.musicSpider(url, data, headers)
+        list_info = Music_Function.music_spider(url, data, headers)
 
         method = self.ui.download_tableWidget.rowCount()
         for i in range(method):
@@ -1122,7 +1124,7 @@ class MusicDownload(QObject):
         song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
 
         os.makedirs("Music", exist_ok=True)
-        Music_Funciton.music_download(song_url, name, sing_name)
+        Music_Function.music_download(song_url, name, sing_name)
 
         self.ui.show_label.setText('下载成功！')
         time.sleep(1)
@@ -1165,7 +1167,7 @@ class MusicDownload(QObject):
 
         try:
             os.makedirs("Music", exist_ok=True)
-            Music_Funciton.music_download(link, name, sing_name)
+            Music_Function.music_download(link, name, sing_name)
             self.ui.show_label.setText('下载完成！')
         except Exception:
             self.ui.show_label.setText('这首难搞哦！')
