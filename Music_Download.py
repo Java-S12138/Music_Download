@@ -46,10 +46,10 @@ class DataList:
         self.music_count = 0  # 歌单总页数
 
 
-def all_download(song_id, music, name):
+def all_download(song_id, music_name, singer_name, meta_inf):
     try:
-        song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
-        Music_Function.music_download(song_url, music, name)
+        music_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
+        Music_Function.music_download(music_url, music_name, singer_name=singer_name, meta_inf=meta_inf)
     except:
         pass
 
@@ -63,9 +63,11 @@ def title_txt(title):  # 主页歌单标题字数限制
         return title
 
 
+# noinspection PyUnresolvedReferences
 class MusicDownload(QObject):
     def __init__(self):
         super(MusicDownload, self).__init__()
+        self.meta_inf = []
         self.lock = threading.Lock()
         self.date = DataList()
         self.img_list = []
@@ -149,9 +151,9 @@ class MusicDownload(QObject):
 
     def home_download(self):  # 播放音乐下载
         os.makedirs("Music", exist_ok=True)
-        url = self.date.music_url[0]
+        music_url = self.date.music_url[0]
         music_name = self.date.music_url[1]
-        Music_Function.music_download(url, music_name)
+        Music_Function.music_download(music_url, music_name)
 
         self.ui.hmoe_show_label.setText('下载完成！')
 
@@ -569,7 +571,7 @@ class MusicDownload(QObject):
 
     def all_music_download(self):
         music_name = []
-        music_singe = []
+        music_singer = []
         id_num = self.ui.music_list_id_Edit.toPlainText()
         id_info = id_num.split()
         method = self.ui.music_list_tableWidget.rowCount()
@@ -577,14 +579,14 @@ class MusicDownload(QObject):
 
         for i in range(method):
             music_n = self.ui.music_list_tableWidget.item(i, 0).text()
-            music_s = self.ui.music_list_tableWidget.item(i, 1).text()
+            music_s = self.ui.music_list_tableWidget.item(i, 1).text().split(" / ")
             music_name.append(music_n)
-            music_singe.append(music_s)
+            music_singer.append(music_s)
 
         def do_download():
             self.ongoing = True
             for var1 in range(method):
-                all_download(id_info[var1], music_name[var1], music_singe[var1])
+                all_download(id_info[var1], music_name[var1], music_singer[var1][0], self.meta_inf[var1])
                 so.progress_update.emit(var1 + 1)
             self.ongoing = False
 
@@ -598,6 +600,7 @@ class MusicDownload(QObject):
 
     def music_list(self, type_in_method):  # 歌单
         self.ui.music_list_id_Edit.clear()
+        self.meta_inf = []
         method = self.ui.music_list_tableWidget.rowCount()
         for i in range(method):
             self.ui.music_list_tableWidget.removeRow(0)
@@ -614,8 +617,11 @@ class MusicDownload(QObject):
             self.ui.music_list_tableWidget.insertRow(0)
         for i in range(len(music_play_list)):
             self.ui.music_list_tableWidget.setItem(i, 0, QTableWidgetItem(f"{music_play_list[i].name}"))
-            self.ui.music_list_tableWidget.setItem(i, 1, QTableWidgetItem(f"{music_play_list[i].artist[0]}"))
+            self.ui.music_list_tableWidget.setItem(i, 1, QTableWidgetItem(f"{' / '.join(music_play_list[i].artist)}"))
             self.ui.music_list_tableWidget.setItem(i, 2, QTableWidgetItem(f"《{music_play_list[i].album}》"))
+            self.meta_inf.append(Music_Function.make_meta_inf(title=music_play_list[i].name,
+                                                              artist=';'.join(music_play_list[i].artist),
+                                                              album=music_play_list[i].album))
             self.ui.music_list_id_Edit.insertPlainText(f'{music_play_list[i].id}\n')
 
     def music_list_download(self):  # 歌单音乐下载
@@ -625,12 +631,12 @@ class MusicDownload(QObject):
 
         d_num = int(self.ui.music_list_lineEdit.text())
 
-        name = self.ui.music_list_tableWidget.item(d_num - 1, 0).text()
+        music_name = self.ui.music_list_tableWidget.item(d_num - 1, 0).text()
 
         song_id = id_info[d_num - 1]
 
-        song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
-        Music_Function.music_download(song_url, name)
+        music_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
+        Music_Function.music_download(music_url, music_name)
 
         self.ui.music_list_label.setText('下载成功！')
         time.sleep(1)
@@ -662,7 +668,7 @@ class MusicDownload(QObject):
         def top_do_download():
             self.ongoing = True
             for var1 in range(len(id_info)):
-                all_download(id_info[var1], music_info_remove[var1][0], name="")
+                all_download(id_info[var1], music_info_remove[var1][0], singer_name="", meta_inf=None)
                 so.top_progress_update.emit(var1 + 1)
             self.ongoing = False
 
@@ -763,11 +769,11 @@ class MusicDownload(QObject):
             name_info = re.findall(r'《(.*)》', name)
 
             song_id = id_info[num - 1]
-            song_name = name_info[num - 1]
-            song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
+            music_name = name_info[num - 1]
+            music_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
 
             os.makedirs("Music", exist_ok=True)
-            Music_Function.music_download(song_url, song_name)
+            Music_Function.music_download(music_url, music_name)
 
             self.ui.top_show_label.setText('下载完成！')
         except:
@@ -1117,14 +1123,15 @@ class MusicDownload(QObject):
 
         d_num = int(self.ui.input_Edit_2.text())
 
-        name = self.ui.download_tableWidget.item(d_num - 1, 0).text()
-        sing_name = self.ui.download_tableWidget.item(d_num - 1, 1).text()
+        music_name = self.ui.download_tableWidget.item(d_num - 1, 0).text()
+        singer_name = self.ui.download_tableWidget.item(d_num - 1, 1).text()
+        album_name = self.ui.download_tableWidget.item(d_num - 1, 2).text()[1:-1]
 
         song_id = id_info[d_num - 1]
-        song_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
+        music_url = f"https://music.163.com/song/media/outer/url?id={song_id}.mp3"
 
-        os.makedirs("Music", exist_ok=True)
-        Music_Function.music_download(song_url, name, sing_name)
+        meta_inf = Music_Function.make_meta_inf(title=music_name, artist=singer_name, album=album_name)
+        Music_Function.music_download(music_url, music_name, singer_name=singer_name, meta_inf=meta_inf)
 
         self.ui.show_label.setText('下载成功！')
         time.sleep(1)
@@ -1137,8 +1144,9 @@ class MusicDownload(QObject):
 
         d_num = int(self.ui.input_Edit_2.text())
 
-        name = self.ui.download_tableWidget.item(d_num - 1, 0).text()
-        sing_name = self.ui.download_tableWidget.item(d_num - 1, 1).text()
+        music_name = self.ui.download_tableWidget.item(d_num - 1, 0).text()
+        singer_name = self.ui.download_tableWidget.item(d_num - 1, 1).text()
+        album_name = self.ui.download_tableWidget.item(d_num - 1, 2).text()
 
         song_id = id_info[d_num - 1]
 
@@ -1152,30 +1160,29 @@ class MusicDownload(QObject):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36'
         }
 
-        link = ""
+        music_url = ""
 
         try:
             rsp = requests.post(url, data=data, headers=headers)
             if source == 'tencent':
-                link = rsp.text[rsp.text.index('http'):rsp.text.index('",')]
-                link = link.replace('\\', '')
+                music_url = rsp.text[rsp.text.index('http'):rsp.text.index('",')]
+                music_url = music_url.replace('\\', '')
             elif source == 'kugou':
-                link = rsp.text[rsp.text.index('http'):rsp.text.index('mp3')] + 'mp3'
-                link = link.replace('\\', '')
+                music_url = rsp.text[rsp.text.index('http'):rsp.text.index('mp3')] + 'mp3'
+                music_url = music_url.replace('\\', '')
         except:
             self.ui.show_label.setText('音乐文件丢失！')
 
         try:
-            os.makedirs("Music", exist_ok=True)
-            Music_Function.music_download(link, name, sing_name)
+            meta_inf = Music_Function.make_meta_inf(title=music_name, artist=singer_name, album=album_name)
+            Music_Function.music_download(music_url, music_name, singer_name=singer_name, meta_inf=meta_inf)
             self.ui.show_label.setText('下载完成！')
         except Exception:
             self.ui.show_label.setText('这首难搞哦！')
 
 
 if __name__ == '__main__':
-    if not os.path.exists('Music'):
-        os.makedirs('Music')
+    os.makedirs('Music', exist_ok=True)
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon(f'{os.getcwd()}/Image/song.png'))
     music_download = MusicDownload()

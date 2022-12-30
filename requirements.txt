@@ -3,4 +3,4 @@ cloudmusic~=0.1.1
 PySide2~=5.15.2.1
 pyquery~=1.4.3
 requests~=2.28.1
-pyinstaller
+mutagen~=1.46.0

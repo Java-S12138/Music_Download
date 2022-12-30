@@ -5,6 +5,8 @@ import requests
 import random
 from pyquery import PyQuery
 import re
+# noinspection PyProtectedMember
+from mutagen.id3 import ID3, TIT2, TPE1, TALB
 
 # 发送请求时的头文件
 html_head = [
@@ -17,6 +19,27 @@ html_head = [
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) "
                       "Chrome/76.0.3809.87 Safari/537.36"}
 ]
+
+
+def make_meta_inf(title="", artist="", album=""):
+    return {"title": title, "artist": artist, "album": album}
+
+
+def set_mp3_info(path, info):
+    song_file = ID3(path)
+    song_file['TIT2'] = TIT2(  # 插入歌名
+        encoding=3,
+        text=info['title']
+    )
+    song_file['TPE1'] = TPE1(  # 插入第一演奏家、歌手、等
+        encoding=3,
+        text=info['artist']
+    )
+    song_file['TALB'] = TALB(  # 插入专辑名
+        encoding=3,
+        text=info['album']
+    )
+    song_file.save()
 
 
 def half2full(s):
@@ -54,20 +77,24 @@ def make_valid_name(name):
     return name
 
 
-def music_download(song_url, name, sing_name=None):
-    response = requests.get(song_url, headers=html_head[random.randint(0, len(html_head) - 1)])
+def music_download(music_url, music_name, singer_name=None, meta_inf=None):
+    response = requests.get(music_url, headers=html_head[random.randint(0, len(html_head) - 1)])
 
     os.makedirs('Music', exist_ok=True)
-    name = make_valid_name(name)
-    if sing_name is not None:
-        sing_name = make_valid_name(sing_name)
+    music_name = make_valid_name(music_name)
+    if singer_name is not None:
+        singer_name = make_valid_name(singer_name)
 
-    if sing_name is None:
-        with open("Music" + '/' + f"{name}.mp3", 'wb') as f:
+    if singer_name is None:
+        with open("Music" + '/' + f"{music_name}.mp3", 'wb') as f:
             f.write(response.content)
+            if meta_inf is not None:
+                set_mp3_info("Music" + '/' + f"{music_name} - {singer_name}.mp3", meta_inf)
     else:
-        with open("Music" + '/' + f"{name} - {sing_name}.mp3", 'wb') as f:
+        with open("Music" + '/' + f"{music_name} - {singer_name}.mp3", 'wb') as f:
             f.write(response.content)
+            if meta_inf is not None:
+                set_mp3_info("Music" + '/' + f"{music_name} - {singer_name}.mp3", meta_inf)
 
 
 def music_home_top(url):  # 网易云音乐排行榜首页显示
