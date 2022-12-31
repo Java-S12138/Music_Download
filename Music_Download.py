@@ -621,7 +621,8 @@ class MusicDownload(QObject):
             self.ui.music_list_tableWidget.setItem(i, 2, QTableWidgetItem(f"《{music_play_list[i].album}》"))
             self.meta_inf.append(Music_Function.make_meta_inf(title=music_play_list[i].name,
                                                               artist=';'.join(music_play_list[i].artist),
-                                                              album=music_play_list[i].album))
+                                                              album=music_play_list[i].album,
+                                                              pic_url=music_play_list[i].picUrl))
             self.ui.music_list_id_Edit.insertPlainText(f'{music_play_list[i].id}\n')
 
     def music_list_download(self):  # 歌单音乐下载

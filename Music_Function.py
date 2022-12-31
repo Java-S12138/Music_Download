@@ -6,7 +6,7 @@ import random
 from pyquery import PyQuery
 import re
 # noinspection PyProtectedMember
-from mutagen.id3 import ID3, TIT2, TPE1, TALB
+from mutagen.id3 import APIC, ID3, TIT2, TPE1, TALB
 
 # 发送请求时的头文件
 html_head = [
@@ -21,23 +21,31 @@ html_head = [
 ]
 
 
-def make_meta_inf(title="", artist="", album=""):
-    return {"title": title, "artist": artist, "album": album}
+def make_meta_inf(title="", artist="", album="", pic_url=""):
+    return {"title": title, "artist": artist, "album": album, "pic_url": pic_url}
 
 
-def set_mp3_info(path, info):
+def set_mp3_info(path, meta_inf):
     song_file = ID3(path)
+    if meta_inf['pic_url'] != "":
+        song_file['APIC'] = APIC(  # 插入专辑图片
+            encoding=3,
+            mime='image/jpeg',
+            type=3,
+            desc=u'Cover',
+            data=requests.get(meta_inf['pic_url'], headers=html_head[random.randint(0, len(html_head) - 1)]).content
+        )
     song_file['TIT2'] = TIT2(  # 插入歌名
         encoding=3,
-        text=info['title']
+        text=meta_inf['title']
     )
     song_file['TPE1'] = TPE1(  # 插入第一演奏家、歌手、等
         encoding=3,
-        text=info['artist']
+        text=meta_inf['artist']
     )
     song_file['TALB'] = TALB(  # 插入专辑名
         encoding=3,
-        text=info['album']
+        text=meta_inf['album']
     )
     song_file.save()
 
