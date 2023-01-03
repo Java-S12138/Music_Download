@@ -606,24 +606,37 @@ class MusicDownload(QObject):
             self.ui.music_list_tableWidget.removeRow(0)
 
         music_id = int(self.ui.music_list_Edit.text())
-        if type_in_method == 'music_play':
-            music_play_list = cloudmusic.getPlaylist(music_id)
+        music_play_list = None
+        flag = False
+        for i in range(3):
+            try:
+                if type_in_method == 'music_play':
+                    music_play_list = cloudmusic.getPlaylist(music_id)
+                else:
+                    music_play_list = cloudmusic.getAlbum(music_id)
+                flag = True
+            except (KeyError, TypeError):
+                pass
+            if flag:
+                break
+
+        if flag:
+            self.ui.music_list_label.setText(f'搜索成功！共{len(music_play_list)}首')
+
+            for i in range(len(music_play_list)):
+                self.ui.music_list_tableWidget.insertRow(0)
+            for i in range(len(music_play_list)):
+                self.ui.music_list_tableWidget.setItem(i, 0, QTableWidgetItem(f"{music_play_list[i].name}"))
+                self.ui.music_list_tableWidget.setItem(i, 1,
+                                                       QTableWidgetItem(f"{' / '.join(music_play_list[i].artist)}"))
+                self.ui.music_list_tableWidget.setItem(i, 2, QTableWidgetItem(f"《{music_play_list[i].album}》"))
+                self.meta_inf.append(Music_Function.make_meta_inf(title=music_play_list[i].name,
+                                                                  artist=';'.join(music_play_list[i].artist),
+                                                                  album=music_play_list[i].album,
+                                                                  pic_url=music_play_list[i].picUrl))
+                self.ui.music_list_id_Edit.insertPlainText(f'{music_play_list[i].id}\n')
         else:
-            music_play_list = cloudmusic.getAlbum(music_id)
-
-        self.ui.music_list_label.setText(f'搜索成功！共{len(music_play_list)}首')
-
-        for i in range(len(music_play_list)):
-            self.ui.music_list_tableWidget.insertRow(0)
-        for i in range(len(music_play_list)):
-            self.ui.music_list_tableWidget.setItem(i, 0, QTableWidgetItem(f"{music_play_list[i].name}"))
-            self.ui.music_list_tableWidget.setItem(i, 1, QTableWidgetItem(f"{' / '.join(music_play_list[i].artist)}"))
-            self.ui.music_list_tableWidget.setItem(i, 2, QTableWidgetItem(f"《{music_play_list[i].album}》"))
-            self.meta_inf.append(Music_Function.make_meta_inf(title=music_play_list[i].name,
-                                                              artist=';'.join(music_play_list[i].artist),
-                                                              album=music_play_list[i].album,
-                                                              pic_url=music_play_list[i].picUrl))
-            self.ui.music_list_id_Edit.insertPlainText(f'{music_play_list[i].id}\n')
+            self.ui.music_list_label.setText(f'失败，请重试或检查输入是否正确')
 
     def music_list_download(self):  # 歌单音乐下载
 
