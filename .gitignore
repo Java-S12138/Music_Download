@@ -1,0 +1,7 @@
+/.idea
+/__pycache__
+/build
+/dist
+/Music
+Music_Download.exe
+Music_Download.spec

@@ -29,7 +29,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Music_Download   BY:Java_S</string>
+   <string>Music_Download</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -481,7 +481,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">image: url(./Image/home_sousuo.png);</string>
+      <string notr="true">image: url(./Image/home_search.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -547,7 +547,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/wyy.png</normaloff>Image/wyy.png</iconset>
+       <normaloff>Image/netease.png</normaloff>Image/netease.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -621,7 +621,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/上一首-01.png</normaloff>Image/上一首-01.png</iconset>
+       <normaloff>Image/previous-song.png</normaloff>Image/previous-song.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -662,7 +662,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/播放-01.png</normaloff>Image/播放-01.png</iconset>
+       <normaloff>Image/play-song.png</normaloff>Image/play-song.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -703,7 +703,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/下一首-01.png</normaloff>Image/下一首-01.png</iconset>
+       <normaloff>Image/next-song.png</normaloff>Image/next-song.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -880,7 +880,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -958,7 +958,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="song_modle">
+    <widget class="QPushButton" name="song_module">
      <property name="geometry">
       <rect>
        <x>437</x>
@@ -987,7 +987,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/列表循环.png</normaloff>Image/列表循环.png</iconset>
+       <normaloff>Image/list-loop.png</normaloff>Image/list-loop.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1149,7 +1149,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/qqmusic.png</normaloff>Image/qqmusic.png</iconset>
+       <normaloff>Image/qq-music.png</normaloff>Image/qq-music.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1196,7 +1196,7 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/kmusic.png</normaloff>Image/kmusic.png</iconset>
+       <normaloff>Image/kugou-music-1.png</normaloff>Image/kugou-music-1.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1472,7 +1472,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/Next.png</normaloff>Image/Next.png</iconset>
+       <normaloff>Image/next.png</normaloff>Image/next.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1513,7 +1513,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/Previous.png</normaloff>Image/Previous.png</iconset>
+       <normaloff>Image/previous.png</normaloff>Image/previous.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1571,7 +1571,7 @@ p, li { white-space: pre-wrap; }
     <zorder>home_download_Button</zorder>
     <zorder>open_Button_4</zorder>
     <zorder>home_music_name_label</zorder>
-    <zorder>song_modle</zorder>
+    <zorder>song_module</zorder>
     <zorder>home_comboBox</zorder>
     <zorder>home_Button_qq</zorder>
     <zorder>home_Button_ku</zorder>
@@ -1670,7 +1670,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/wyy.png</normaloff>Image/wyy.png</iconset>
+       <normaloff>Image/netease.png</normaloff>Image/netease.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1729,7 +1729,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/qqmusic.png</normaloff>Image/qqmusic.png</iconset>
+       <normaloff>Image/qq-music.png</normaloff>Image/qq-music.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1826,7 +1826,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1909,7 +1909,7 @@ p, li { white-space: pre-wrap; }
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">image: url(./Image/sousuo.png);</string>
+      <string notr="true">image: url(./Image/search.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -1960,7 +1960,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/kmusic.png</normaloff>Image/kmusic.png</iconset>
+       <normaloff>Image/kugou-music-1.png</normaloff>Image/kugou-music-1.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2096,7 +2096,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/musiclist.png</normaloff>Image/musiclist.png</iconset>
+       <normaloff>Image/music-list.png</normaloff>Image/music-list.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2166,7 +2166,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2339,7 +2339,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/alldownload.png</normaloff>Image/alldownload.png</iconset>
+       <normaloff>Image/all-download.png</normaloff>Image/all-download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2687,7 +2687,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/dowload.png</normaloff>Image/dowload.png</iconset>
+       <normaloff>Image/download.png</normaloff>Image/download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -2851,7 +2851,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/alldownload.png</normaloff>Image/alldownload.png</iconset>
+       <normaloff>Image/all-download.png</normaloff>Image/all-download.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -3059,7 +3059,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/openexcel.png</normaloff>Image/openexcel.png</iconset>
+       <normaloff>Image/open-excel.png</normaloff>Image/open-excel.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -3367,7 +3367,8 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;-------------------------------------------&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;世界因代码而改变！&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'微软雅黑';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;BY：Java_S&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;BY：Java_S&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'微软雅黑';&quot;&gt;Contributions: Bluemangoo&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QTextBrowser" name="textBrowser_2">
@@ -3429,7 +3430,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Image/换肤.png</normaloff>Image/换肤.png</iconset>
+       <normaloff>Image/change-skin.png</normaloff>Image/change-skin.png</iconset>
      </property>
      <property name="iconSize">
       <size>
